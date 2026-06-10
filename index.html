@@ -1,24 +1,46 @@
 <!DOCTYPE html>
 <html lang="es">
-<script src="https://unpkg.com/html5-qrcode"></script>
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Catálogo ITF Grupo Grisi</title>
 
+<script src="https://unpkg.com/html5-qrcode"></script>
+
 <style>
+
 body{
-    font-family: 'Segoe UI', sans-serif;
+    font-family:'Segoe UI',sans-serif;
     background:linear-gradient(180deg,#eef4fb 0%,#f7f9fc 100%);
     max-width:900px;
     margin:auto;
     padding:20px;
 }
 
+.logo-container{
+    text-align:center;
+    margin-bottom:10px;
+}
+
+.logo{
+    width:180px;
+    max-width:80%;
+    filter:drop-shadow(0 4px 10px rgba(0,0,0,.15));
+}
+
 h2{
     text-align:center;
-    color:#003366;
+    color:#0054A6;
+    margin-bottom:10px;
+}
+
+.subtitulo{
+    text-align:center;
+    color:#666;
     margin-bottom:25px;
+    font-size:16px;
 }
 
 input{
@@ -28,6 +50,7 @@ input{
     border:2px solid #d9d9d9;
     border-radius:10px;
     box-sizing:border-box;
+    background:white;
 }
 
 button{
@@ -46,6 +69,16 @@ button:hover{
     opacity:.9;
 }
 
+.btn-escanear{
+    background:#28a745;
+    color:white;
+}
+
+.btn-buscar{
+    background:#0054A6;
+    color:white;
+}
+
 #reader{
     margin-top:15px;
 }
@@ -56,12 +89,13 @@ button:hover{
     border-radius:15px;
     padding:25px;
     box-shadow:0 4px 12px rgba(0,0,0,.12);
+    border-left:8px solid #0054A6;
 }
 
 .material{
-    font-size:32px;
+    font-size:36px;
     font-weight:bold;
-    color:#003366;
+    color:#0054A6;
     margin-bottom:20px;
 }
 
@@ -74,33 +108,31 @@ button:hover{
     font-weight:bold;
     color:#666;
 }
-.logo-container{
-    text-align:center;
-    margin-bottom:10px;
-}
 
-.logo{
-    width:160px;
-    max-width:80%;
-}
-
-h2{
-    text-align:center;
-    color:#0054A6;
-    margin-bottom:25px;
-}
 </style>
 </head>
 
 <body>
 
+<div class="logo-container">
+    <img src="grupogrisi_logo-Photoroom.png" alt="Grupo Grisi" class="logo">
+</div>
+
 <h2>Consulta de Material por ITF</h2>
+
+<p class="subtitulo">
+Escanea o captura el ITF para consultar información del material
+</p>
 
 <input id="itf" placeholder="Ingresa o escanea el ITF">
 
-<button onclick="iniciarEscaner()">📷 Escanear código</button>
+<button class="btn-escanear" onclick="iniciarEscaner()">
+📷 Escanear código
+</button>
 
-<button onclick="buscar()">🔍 Buscar</button>
+<button class="btn-buscar" onclick="buscar()">
+🔍 Buscar material
+</button>
 
 <div id="reader"></div>
 
@@ -115,8 +147,6 @@ fetch('materiales.csv')
 .then(texto => {
 
 const filas = texto.split('\n');
-
-const encabezados = filas[0].split(',');
 
 for(let i=1;i<filas.length;i++){
 
@@ -137,6 +167,14 @@ console.log("Registros cargados:", datos.length);
 
 });
 
+document.getElementById("itf").addEventListener("keypress", function(event){
+
+if(event.key === "Enter"){
+buscar();
+}
+
+});
+
 function buscar(){
 
 const itf=document.getElementById('itf').value.trim();
@@ -148,6 +186,7 @@ x => String(x.ITF).trim() === itf
 if(item){
 
 document.getElementById('resultado').innerHTML=`
+
 <div class="material">
 📦 ${item.MATERIAL}
 </div>
@@ -166,17 +205,25 @@ ${item.CENTRO}
 <span class="etiqueta">ITF:</span>
 ${item.ITF}
 </div>
+
 `;
 
 }else{
 
-document.getElementById('resultado').innerHTML=
-'<b>Material no encontrado</b>';
+document.getElementById('resultado').innerHTML=`
+
+<div style="text-align:center;padding:20px;">
+<h3>❌ Material no encontrado</h3>
+<p>Verifica el ITF e intenta nuevamente.</p>
+</div>
+
+`;
 
 }
 
 }
-    function iniciarEscaner(){
+
+function iniciarEscaner(){
 
 const html5QrCode = new Html5Qrcode("reader");
 
@@ -196,10 +243,13 @@ html5QrCode.start(
 
     }
 ).catch(err => {
+
     alert("No se pudo abrir la cámara");
+
 });
 
 }
+
 </script>
 
 </body>
