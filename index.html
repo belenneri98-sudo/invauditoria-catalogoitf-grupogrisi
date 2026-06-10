@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consulta ITF</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    max-width:700px;
+    margin:auto;
+    padding:20px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    font-size:18px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    font-size:18px;
+}
+
+#resultado{
+    margin-top:20px;
+    padding:15px;
+    border:1px solid #ccc;
+    border-radius:8px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Consulta de Material por ITF</h2>
+
+<input type="text" id="itf" placeholder="Ingresa el ITF">
+
+<button onclick="buscar()">Buscar</button>
+
+<div id="resultado"></div>
+
+<script>
+
+const datos = [];
+
+function buscar(){
+
+const itf = document.getElementById('itf').value;
+
+const material = datos.find(
+x => String(x.ITF) === String(itf)
+);
+
+if(material){
+
+document.getElementById('resultado').innerHTML = `
+<h3>${material.MATERIAL}</h3>
+<p><b>Descripción:</b> ${material.DESCRIPCION}</p>
+<p><b>Centro:</b> ${material.CENTRO}</p>
+`;
+
+}else{
+
+document.getElementById('resultado').innerHTML =
+'Material no encontrado';
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
