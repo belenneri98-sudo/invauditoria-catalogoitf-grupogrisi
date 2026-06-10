@@ -2,13 +2,13 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Consulta ITF</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catálogo ITF Grupo Grisi</title>
 
 <style>
 body{
     font-family: Arial, sans-serif;
-    max-width:700px;
+    max-width:800px;
     margin:auto;
     padding:20px;
 }
@@ -17,19 +17,20 @@ input{
     width:100%;
     padding:12px;
     font-size:18px;
+    margin-bottom:10px;
 }
 
 button{
     width:100%;
     padding:12px;
-    margin-top:10px;
     font-size:18px;
+    cursor:pointer;
 }
 
 #resultado{
     margin-top:20px;
     padding:15px;
-    border:1px solid #ccc;
+    border:1px solid #ddd;
     border-radius:8px;
 }
 </style>
@@ -39,7 +40,7 @@ button{
 
 <h2>Consulta de Material por ITF</h2>
 
-<input type="text" id="itf" placeholder="Ingresa el ITF">
+<input id="itf" placeholder="Ingresa o escanea el ITF">
 
 <button onclick="buscar()">Buscar</button>
 
@@ -47,33 +48,60 @@ button{
 
 <script>
 
-const datos = [];
+let datos=[];
+
+fetch('materiales.csv')
+.then(response => response.text())
+.then(texto => {
+
+const filas = texto.split('\n');
+
+const encabezados = filas[0].split(',');
+
+for(let i=1;i<filas.length;i++){
+
+if(!filas[i].trim()) continue;
+
+const columnas = filas[i].split(',');
+
+datos.push({
+MATERIAL: columnas[0],
+DESCRIPCION: columnas[1],
+ITF: columnas[2],
+CENTRO: columnas[3]
+});
+
+}
+
+console.log("Registros cargados:", datos.length);
+
+});
 
 function buscar(){
 
-const itf = document.getElementById('itf').value;
+const itf=document.getElementById('itf').value.trim();
 
-const material = datos.find(
-x => String(x.ITF) === String(itf)
+const item=datos.find(
+x => String(x.ITF).trim() === itf
 );
 
-if(material){
+if(item){
 
-document.getElementById('resultado').innerHTML = `
-<h3>${material.MATERIAL}</h3>
-<p><b>Descripción:</b> ${material.DESCRIPCION}</p>
-<p><b>Centro:</b> ${material.CENTRO}</p>
+document.getElementById('resultado').innerHTML=`
+<h3>${item.MATERIAL}</h3>
+<p><b>Descripción:</b> ${item.DESCRIPCION}</p>
+<p><b>Centro:</b> ${item.CENTRO}</p>
+<p><b>ITF:</b> ${item.ITF}</p>
 `;
 
 }else{
 
-document.getElementById('resultado').innerHTML =
-'Material no encontrado';
+document.getElementById('resultado').innerHTML=
+'<b>Material no encontrado</b>';
 
 }
 
 }
-
 </script>
 
 </body>
