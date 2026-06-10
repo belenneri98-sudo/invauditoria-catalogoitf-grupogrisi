@@ -8,31 +8,71 @@
 
 <style>
 body{
-    font-family: Arial, sans-serif;
-    max-width:800px;
+    font-family: 'Segoe UI', sans-serif;
+    background:#f4f6f8;
+    max-width:900px;
     margin:auto;
     padding:20px;
 }
 
+h2{
+    text-align:center;
+    color:#003366;
+    margin-bottom:25px;
+}
+
 input{
     width:100%;
-    padding:12px;
+    padding:15px;
     font-size:18px;
-    margin-bottom:10px;
+    border:2px solid #d9d9d9;
+    border-radius:10px;
+    box-sizing:border-box;
 }
 
 button{
     width:100%;
-    padding:12px;
+    padding:15px;
+    margin-top:10px;
+    border:none;
+    border-radius:10px;
     font-size:18px;
+    font-weight:bold;
     cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+#reader{
+    margin-top:15px;
 }
 
 #resultado{
-    margin-top:20px;
-    padding:15px;
-    border:1px solid #ddd;
-    border-radius:8px;
+    margin-top:25px;
+    background:white;
+    border-radius:15px;
+    padding:25px;
+    box-shadow:0 4px 12px rgba(0,0,0,.12);
+}
+
+.material{
+    font-size:32px;
+    font-weight:bold;
+    color:#003366;
+    margin-bottom:20px;
+}
+
+.info{
+    font-size:20px;
+    margin-bottom:12px;
+}
+
+.etiqueta{
+    font-weight:bold;
+    color:#666;
 }
 </style>
 </head>
@@ -93,10 +133,24 @@ x => String(x.ITF).trim() === itf
 if(item){
 
 document.getElementById('resultado').innerHTML=`
-<h3>${item.MATERIAL}</h3>
-<p><b>Descripción:</b> ${item.DESCRIPCION}</p>
-<p><b>Centro:</b> ${item.CENTRO}</p>
-<p><b>ITF:</b> ${item.ITF}</p>
+<div class="material">
+📦 ${item.MATERIAL}
+</div>
+
+<div class="info">
+<span class="etiqueta">Descripción:</span><br>
+${item.DESCRIPCION}
+</div>
+
+<div class="info">
+<span class="etiqueta">Centro:</span>
+${item.CENTRO}
+</div>
+
+<div class="info">
+<span class="etiqueta">ITF:</span>
+${item.ITF}
+</div>
 `;
 
 }else{
