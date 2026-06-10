@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+<script src="https://unpkg.com/html5-qrcode"></script>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -42,7 +43,11 @@ button{
 
 <input id="itf" placeholder="Ingresa o escanea el ITF">
 
-<button onclick="buscar()">Buscar</button>
+<button onclick="iniciarEscaner()">📷 Escanear código</button>
+
+<button onclick="buscar()">🔍 Buscar</button>
+
+<div id="reader"></div>
 
 <div id="resultado"></div>
 
@@ -100,6 +105,30 @@ document.getElementById('resultado').innerHTML=
 '<b>Material no encontrado</b>';
 
 }
+
+}
+    function iniciarEscaner(){
+
+const html5QrCode = new Html5Qrcode("reader");
+
+html5QrCode.start(
+    { facingMode: "environment" },
+    {
+        fps: 10,
+        qrbox: 250
+    },
+    (codigo) => {
+
+        document.getElementById("itf").value = codigo;
+
+        html5QrCode.stop();
+
+        buscar();
+
+    }
+).catch(err => {
+    alert("No se pudo abrir la cámara");
+});
 
 }
 </script>
